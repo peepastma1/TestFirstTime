@@ -1,6 +1,6 @@
 <template>
-    <div class="Ex1">
-        <h1>Ex1</h1>
+    <div class="Ex2">
+        <h1>Ex2</h1>
         <input v-model="newData">
         <button @click="addData">Submit</button>
         <ul>
@@ -61,5 +61,5 @@ export default {
     },
 };
 </script>
-
+  
   
