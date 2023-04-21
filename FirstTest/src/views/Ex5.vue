@@ -1,65 +1,68 @@
 <template>
-    <div class="Ex1">
-        <h1>Ex5</h1>
-        <input v-model="newData">
-        <button @click="addData">Submit</button>
-        <ul>
-            <li v-for="(Data, index) in DataList" :key="index">
-                {{ Data }}
-                <button @click="editData(index)">Edit</button>
-                <!-- <button @click="editData(index)">{{ buttonText }}</button> -->
-                <button @click="deleteData(index)">Delete</button>
-            </li>
-        </ul>
-        <div v-if="editing">
-            <input v-model="editedData" placeholder="Edit item">
-            <button @click="saveData">Save</button>
-            <button @click="cancelData">Cancel</button>
+    <div>
+        <form @submit.prevent="generateChristmasTree">
+            <label for="treeHeight">Enter a number from 1 to 10:</label>
+            <input type="number" id="treeHeight" v-model.number="treeHeight" min="1" max="10">
+            <button type="submit">Generate</button>
+        </form>
+        <div v-if="treeGenerated">
+            <h2>Here's your Christmas tree:</h2>
+            <div v-for="(tree, index) in trees" :key="index">
+                <div v-for="(row, rowIndex) in tree" :key="rowIndex">
+                    {{ rowIndex+1}} {{ row }} <a v-if="Math.floor(rowIndex + 1) == Math.floor(treeHeight/2)+1"> Bush {{ index +1 }}</a>
+                </div>
+
+                <!-- <div v-for="i in treeHeight" :key="i">
+                    
+                </div> -->
+
+                <!-- <p>Order of rows: {{ getRowOrder(treeHeight) }}</p> -->
+            </div>
+            <div v-for="(tr, index) in trs" :key="index">
+                <div v-for="(row, rowIndex) in tr" :key="rowIndex">
+                    {{ rowIndex+1}} {{ row }}
+                </div>
+            </div>
         </div>
     </div>
 </template>
-
+  
 <script>
 export default {
     data() {
         return {
-            DataList: [],
-            newData: '',
-            editing: false,
-            editedIndex: null,
-            editedData: '',
-            buttonText: 'Edit'
+            treeHeight: 1,
+            trees: [],
+            trs:[],
+            treeGenerated: false
         };
     },
     methods: {
-        addData() {
-            if (this.newData !== '') {
-                this.DataList.push(this.newData);
-                this.newData = '';
+        generateChristmasTree() {
+            this.trees = [];
+            // tr.push("x".repeat(this.treeHeight) + " * *");
+            for (let i = 0; i < this.treeHeight; i++) {
+                const tree = [];
+                for (let j = 0; j < this.treeHeight; j++) {
+                    tree.push("_".repeat(this.treeHeight - j) + " ".repeat(this.treeHeight - j - 1) + " *".repeat(j + 1));
+                }
+                this.trees.push(tree);
             }
+
+            this.treeGenerated = true;
+            this.gener()
         },
-        editData(index) {
-            this.editing = true;
-            this.buttonText = 'Cancle Edit';
-            this.editedIndex = index;
-            this.editedData = this.DataList[index];
-        },
-        saveData() {
-            this.DataList[this.editedIndex] = this.editedData;
-            this.editedData = '';
-            this.editedIndex = null;
-            this.editing = false;
-        },
-        cancelData() {
-            this.editedData = '';
-            this.editedIndex = null;
-            this.editing = false;
-        },
-        deleteData(index) {
-            this.DataList.splice(index, 1);
-        },
-    },
+        gener(){
+            this.trs = [];
+            const tr = [];
+            for(let i = 0; i < this.treeHeight; i++){
+                    tr.push( "_".repeat(this.treeHeight)+"* *");
+                }
+         this.trs.push(tr);
+        }
+        //   getRowOrder(height) {
+        //     return Array.from({ length: height }, (_, i) => i + 1).join(", ");
+        //   }
+    }
 };
 </script>
-  
-  
